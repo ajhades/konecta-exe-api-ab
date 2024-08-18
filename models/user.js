@@ -41,10 +41,11 @@ const updateUser = async (id, user) => {
 
 // Delete User
 const deleteUser = async (id) => {
-  await pool.query(`UPDATE users SET deleted_at = $1 WHERE id = $2`, [
-    new Date(),
-    id,
-  ]);
+  const result = await pool.query(
+    `UPDATE users SET deleted_at = $1 WHERE id = $2`,
+    [new Date(), id]
+  );
+  return result.rowCount > 0;
 };
 
 module.exports = {

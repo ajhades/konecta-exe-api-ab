@@ -8,6 +8,10 @@ require('dotenv').config();
 const pool = require('./db/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var employeesRouter = require('./routes/employees');
+var requestsRouter = require('./routes/requests');
+var rolesRouter = require('./routes/roles');
+var permissionsRouter = require('./routes/permissions');
 
 var app = express();
 
@@ -24,5 +28,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/employees', employeesRouter);
+app.use('/requests', requestsRouter);
+app.use('/roles', rolesRouter);
+app.use('/permissions', permissionsRouter);
 
 module.exports = app;
