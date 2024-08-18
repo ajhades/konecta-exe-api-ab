@@ -15,26 +15,27 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('permissions', {
+  return db.createTable('applications', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    name: 'string',
+    code: 'string',
     description: 'string',
+    resume: 'string',
     created_at: 'timestamp',
     updated_at: 'timestamp',
     deleted_at: 'timestamp',
-    role_id: {
+    employee_id: {
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'role_permissions_id_fk',
-        table: 'roles',
+        name: 'application_employees_id_fk',
+        table: 'employees',
         rules: {
           onDelete: 'CASCADE',
           onUpdate: 'RESTRICT',
         },
         mapping: {
-          role_id: 'id',
+          employee_id: 'id',
         },
       },
     },
@@ -42,7 +43,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.dropTable('permissions');
+  return db.dropTable('applications');
 };
 
 exports._meta = {

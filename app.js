@@ -11,7 +11,6 @@ var usersRouter = require('./routes/users');
 var employeesRouter = require('./routes/employees');
 var applicationsRouter = require('./routes/applications');
 var rolesRouter = require('./routes/roles');
-var permissionsRouter = require('./routes/permissions');
 
 var app = express();
 
@@ -31,6 +30,5 @@ app.use('/users', usersRouter);
 app.use('/employees', employeesRouter);
 app.use('/applications', applicationsRouter);
 app.use('/roles', rolesRouter);
-app.use('/permissions', permissionsRouter);
 
 module.exports = app;
