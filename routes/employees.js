@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Employee = require('../models/employee');
 
+const authorizeRoles = require('../middlewares/autorizeRoles');
+
 // Create Employee
-router.post('/', async (req, res) => {
+router.post('/', authorizeRoles(['admin']), async (req, res) => {
   try {
     const employee = await Employee.createEmployee(req.body);
     res.status(201).json(employee);
@@ -13,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Read Employees
-router.get('/', async (req, res) => {
+router.get('/', authorizeRoles(['admin', 'employee']), async (req, res) => {
   try {
     const employees = await Employee.getEmployees();
     res.json(employees);
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // Read Employee by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authorizeRoles(['admin', 'employee']), async (req, res) => {
   try {
     const employee = await Employee.getEmployeeById(req.params.id);
     if (!employee)
@@ -35,7 +37,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update Employee
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const employee = await Employee.updateEmployee(req.params.id, req.body);
     if (!employee)
@@ -47,7 +49,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete Employee
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const wasDeleted = await Employee.deleteEmployee(req.params.id);
     if (wasDeleted) {

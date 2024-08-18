@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 const User = require('../models/user');
 
+const authorizeRoles = require('../middlewares/autorizeRoles');
+
 // Create User
-router.post('/', async (req, res) => {
+router.post('/', authorizeRoles(['admin']), async (req, res) => {
   try {
     const user = await User.createUser(req.body);
     res.status(201).json(user);
@@ -13,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Read Users
-router.get('/', async (req, res) => {
+router.get('/', authorizeRoles(['admin']), async (req, res) => {
   try {
     const users = await User.getUsers();
     res.json(users);
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // Read User by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const user = await User.getUserById(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -34,7 +36,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update User
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const user = await User.updateUser(req.params.id, req.body);
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -45,7 +47,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete User
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const wasDeleted = await User.deleteUser(req.params.id);
     if (wasDeleted) {

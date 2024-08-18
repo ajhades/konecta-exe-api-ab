@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Role = require('../models/role');
 
+const authorizeRoles = require('../middlewares/autorizeRoles');
+
 // Create Role
-router.post('/', async (req, res) => {
+router.post('/', authorizeRoles(['admin']), async (req, res) => {
   try {
     const role = await Role.createRole(req.body);
     res.status(201).json(role);
@@ -13,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Read Roles
-router.get('/', async (req, res) => {
+router.get('/', authorizeRoles(['admin']), async (req, res) => {
   try {
     const roles = await Role.getRoles();
     res.json(roles);
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // Read Role by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const role = await Role.getRoleById(req.params.id);
     if (!role) return res.status(404).json({ message: 'Role not found' });
@@ -34,7 +36,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update Role
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const role = await Role.updateRole(req.params.id, req.body);
     if (!role) return res.status(404).json({ message: 'Role not found' });
@@ -45,7 +47,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete Role
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const wasDeleted = await Role.deleteRole(req.params.id);
     if (wasDeleted) {

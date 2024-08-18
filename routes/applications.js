@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Application = require('../models/application');
 
+const authorizeRoles = require('../middlewares/autorizeRoles');
+
 // Create Application
-router.post('/', async (req, res) => {
+router.post('/', authorizeRoles(['admin', 'employee']), async (req, res) => {
   try {
     const request = await Application.createApplication(req.body);
     res.status(201).json(request);
@@ -13,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Read Applications
-router.get('/', async (req, res) => {
+router.get('/', authorizeRoles(['admin', 'employee']), async (req, res) => {
   try {
     const requests = await Application.getApplications();
     res.json(requests);
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // Read Application by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authorizeRoles(['admin', 'employee']), async (req, res) => {
   try {
     const request = await Application.getApplicationById(req.params.id);
     if (!request)
@@ -35,7 +37,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update Application
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorizeRoles(['admin', 'employee']), async (req, res) => {
   try {
     const request = await Application.updateApplication(
       req.params.id,
@@ -50,7 +52,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete Application
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorizeRoles(['admin']), async (req, res) => {
   try {
     const wasDeleted = await Application.deleteApplication(req.params.id);
     if (wasDeleted) {

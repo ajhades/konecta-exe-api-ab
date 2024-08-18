@@ -45,8 +45,4 @@ router.post('/logout', (req, res) => {
   res.send('Logged out');
 });
 
-router.get('/admin-only', authorizeRoles(['admin']), (req, res) => {
-  res.send('Este es un endpoint solo para administradores.');
-});
-
 module.exports = router;
