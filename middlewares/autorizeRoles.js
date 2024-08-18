@@ -3,7 +3,10 @@ const pool = require('../db/db');
 const Role = require('../models/role');
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
-
+/**
+ * Verify token and validate user role based on input
+ * @param {Array.<string>} allowedRoles - Array of role names
+ */
 const authorizeRoles = (allowedRoles) => {
   return async (req, res, next) => {
     const authHeader = req.headers['authorization'];

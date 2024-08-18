@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/user');
+const { getPaginatedData } = require('../db/dbPageQueries');
 
 const authorizeRoles = require('../middlewares/autorizeRoles');
 
@@ -16,11 +17,14 @@ router.post('/', authorizeRoles(['admin']), async (req, res) => {
 
 // Read Users
 router.get('/', authorizeRoles(['admin']), async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 10;
+
   try {
-    const users = await User.getUsers();
-    res.json(users);
+    const paginatedData = await getPaginatedData('users', page, pageSize, 'id');
+    res.json(paginatedData);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.sendStatus(500);
   }
 });
 
