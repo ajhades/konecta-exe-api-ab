@@ -22,7 +22,7 @@ const getRoles = async () => {
 // Read Role by ID
 const getRoleById = async (id) => {
   const result = await pool.query(
-    `SELECT * FROM roles WHERE id = $1 WHERE deleted_at is null`,
+    `SELECT * FROM roles WHERE id = $1 AND deleted_at is null`,
     [id]
   );
   return result.rows[0];

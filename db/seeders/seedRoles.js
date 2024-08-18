@@ -3,9 +3,9 @@ const pool = require('../db');
 
 const seedRoles = async () => {
   const roles = [
-    { name: 'Admin', created_at: new Date(), updated_at: new Date() },
-    { name: 'Employee', created_at: new Date(), updated_at: new Date() },
-    { name: 'Guest', created_at: new Date(), updated_at: new Date() },
+    { name: 'admin', created_at: new Date(), updated_at: new Date() },
+    { name: 'employee', created_at: new Date(), updated_at: new Date() },
+    { name: 'guest', created_at: new Date(), updated_at: new Date() },
   ];
 
   const client = await pool.connect();

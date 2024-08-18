@@ -7,8 +7,8 @@ const seedUsers = async () => {
 
   for (let i = 0; i < 5; i++) {
     users.push({
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
+      username: faker.internet.userName().toLowerCase(),
+      email: faker.internet.email().toLowerCase(),
       password: faker.internet.password(),
       role_id: i === 0 ? 1 : faker.number.int({ min: 1, max: 3 }),
       created_at: new Date(),

@@ -5,12 +5,13 @@ var logger = require('morgan');
 
 require('dotenv').config();
 
-const pool = require('./db/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var employeesRouter = require('./routes/employees');
 var applicationsRouter = require('./routes/applications');
 var rolesRouter = require('./routes/roles');
+
+const authenticateToken = require('./middlewares/authenticateToken');
 
 var app = express();
 
@@ -26,9 +27,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/employees', employeesRouter);
-app.use('/applications', applicationsRouter);
-app.use('/roles', rolesRouter);
+const protectedRouter = express.Router();
+
+protectedRouter.use(authenticateToken);
+
+protectedRouter.use('/users', usersRouter);
+protectedRouter.use('/employees', employeesRouter);
+protectedRouter.use('/applications', applicationsRouter);
+protectedRouter.use('/roles', rolesRouter);
+
+app.use('/api/v1', protectedRouter);
 
 module.exports = app;

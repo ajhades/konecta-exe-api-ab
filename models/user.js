@@ -6,7 +6,14 @@ const createUser = async (user) => {
   const result = await pool.query(
     `INSERT INTO users (username, email, password, role_id, created_at, updated_at) 
      VALUES ($1, $2, $3, $4, $5, $6)  RETURNING *`,
-    [username, email, password, role, new Date(), new Date()]
+    [
+      username.toLowerCase(),
+      email.toLowerCase(),
+      password,
+      role,
+      new Date(),
+      new Date(),
+    ]
   );
   return result.rows[0];
 };
@@ -34,7 +41,14 @@ const updateUser = async (id, user) => {
   const result = await pool.query(
     `UPDATE users SET username = $1, email = $2, password = $3, role_id = $4, updated_at = $5 
      WHERE id = $6 AND deleted_at is null RETURNING *`,
-    [username, email, password, role, new Date(), id]
+    [
+      username.toLowerCase(),
+      email.toLowerCase(),
+      password,
+      role,
+      new Date(),
+      id,
+    ]
   );
   return result.rows[0];
 };
@@ -48,10 +62,22 @@ const deleteUser = async (id) => {
   return result.rowCount > 0;
 };
 
+// Get User login
+const getUsersLogin = async (user) => {
+  const { username, password } = user;
+  const result = await pool.query(
+    `SELECT username, role_id FROM users 
+     WHERE deleted_at is null AND username = $1 AND password = $2`,
+    [username, password]
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserById,
   updateUser,
   deleteUser,
+  getUsersLogin,
 };
