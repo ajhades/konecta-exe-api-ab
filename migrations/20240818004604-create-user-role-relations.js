@@ -15,24 +15,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('employees', {
-    id: { type: 'int', primaryKey: true, autoIncrement: true },
-    first_name: 'string',
-    last_name: 'string',
-    position: 'string',
-    created_at: 'timestamp',
-    updated_at: 'timestamp',
-    deleted_at: 'timestamp',
-    user_id:{ 
-      type: 'int', 
-      notNull: true, 
-      unsigned: true, 
-    },
-  });
+  return db.addForeignKey('users', 'roles', 'role_users_id_fk',
+    {
+      'role_id': 'id'
+    });
 };
 
 exports.down = function(db) {
-  return db.dropTable('employees');
+  return db.removeForeignKey('users', 'role_users_id_fk');
 };
 
 exports._meta = {

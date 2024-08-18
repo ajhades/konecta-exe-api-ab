@@ -16,11 +16,12 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable('roles', {
-    id: { type: 'int', primaryKey: true },
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     name: 'string',
     description: 'string',
     created_at: 'timestamp',
     updated_at: 'timestamp',
+    deleted_at: 'timestamp',
   });
 };
 

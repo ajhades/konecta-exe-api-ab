@@ -16,12 +16,13 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable('requests', {
-    id: { type: 'int', primaryKey: true },
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     code: 'string',
     description: 'string',
     resume: 'string',
     created_at: 'timestamp',
     updated_at: 'timestamp',
+    deleted_at: 'timestamp',
     employee_id:
     {
       type: 'int',
