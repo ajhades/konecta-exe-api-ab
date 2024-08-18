@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('requests', {
+  return db.createTable('applications', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     code: 'string',
     description: 'string',
@@ -43,7 +43,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.dropTable('requests');
+  return db.dropTable('applications');
 };
 
 exports._meta = {

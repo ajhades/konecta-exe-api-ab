@@ -1,57 +1,64 @@
 const express = require('express');
 const router = express.Router();
-const Request = require('../models/request');
+const Application = require('../models/application');
 
-// Create Request
+// Create Application
 router.post('/', async (req, res) => {
   try {
-    const request = await Request.createRequest(req.body);
+    const request = await Application.createApplication(req.body);
     res.status(201).json(request);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-// Read Requests
+// Read Applications
 router.get('/', async (req, res) => {
   try {
-    const requests = await Request.getRequests();
+    const requests = await Application.getApplications();
     res.json(requests);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Read Request by ID
+// Read Application by ID
 router.get('/:id', async (req, res) => {
   try {
-    const request = await Request.getRequestById(req.params.id);
-    if (!request) return res.status(404).json({ message: 'Request not found' });
+    const request = await Application.getApplicationById(req.params.id);
+    if (!request)
+      return res.status(404).json({ message: 'Application not found' });
     res.json(request);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Update Request
+// Update Application
 router.put('/:id', async (req, res) => {
   try {
-    const request = await Request.updateRequest(req.params.id, req.body);
-    if (!request) return res.status(404).json({ message: 'Request not found' });
+    const request = await Application.updateApplication(
+      req.params.id,
+      req.body
+    );
+    if (!request)
+      return res.status(404).json({ message: 'Application not found' });
     res.json(request);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-// Delete Request
+// Delete Application
 router.delete('/:id', async (req, res) => {
   try {
-    const wasDeleted = await Request.deleteRequest(req.params.id);
+    const wasDeleted = await Application.deleteApplication(req.params.id);
     if (wasDeleted) {
-      res.json({ message: 'Request marked as deleted', success: true });
+      res.json({ message: 'Application marked as deleted', success: true });
     } else {
-      res.status(404).json({ message: 'Request not found', success: false });
+      res
+        .status(404)
+        .json({ message: 'Application not found', success: false });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

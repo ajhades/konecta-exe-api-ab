@@ -9,7 +9,7 @@ const pool = require('./db/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var employeesRouter = require('./routes/employees');
-var requestsRouter = require('./routes/requests');
+var applicationsRouter = require('./routes/applications');
 var rolesRouter = require('./routes/roles');
 var permissionsRouter = require('./routes/permissions');
 
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/employees', employeesRouter);
-app.use('/requests', requestsRouter);
+app.use('/applications', applicationsRouter);
 app.use('/roles', rolesRouter);
 app.use('/permissions', permissionsRouter);
 
