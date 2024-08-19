@@ -22,7 +22,7 @@ const getApplications = async () => {
 // Read Application by ID
 const getApplicationById = async (id) => {
   const result = await pool.query(
-    `SELECT * FROM applications WHERE id = $1 WHERE deleted_at is null`,
+    `SELECT * FROM applications WHERE id = $1 AND deleted_at is null`,
     [id]
   );
   return result.rows[0];
