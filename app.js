@@ -1,4 +1,5 @@
 var express = require('express');
+const helmet = require('helmet');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -21,6 +22,7 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 app.use(logger('dev'));
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

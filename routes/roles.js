@@ -1,63 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const Role = require('../models/role');
+const {
+  indexRole,
+  findRole,
+  createRole,
+  updateRole,
+  deleteRole,
+} = require('../controllers/roleController');
 
 const authorizeRoles = require('../middlewares/autorizeRoles');
 
 // Create Role
-router.post('/', authorizeRoles(['admin']), async (req, res) => {
-  try {
-    const role = await Role.createRole(req.body);
-    res.status(201).json(role);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+router.post('/', authorizeRoles(['admin']), createRole);
 
 // Read Roles
-router.get('/', authorizeRoles(['admin']), async (req, res) => {
-  try {
-    const roles = await Role.getRoles();
-    res.json(roles);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.get('/', authorizeRoles(['admin']), indexRole);
 
 // Read Role by ID
-router.get('/:id', authorizeRoles(['admin']), async (req, res) => {
-  try {
-    const role = await Role.getRoleById(req.params.id);
-    if (!role) return res.status(404).json({ message: 'Role not found' });
-    res.json(role);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.get('/:id', authorizeRoles(['admin']), findRole);
 
 // Update Role
-router.put('/:id', authorizeRoles(['admin']), async (req, res) => {
-  try {
-    const role = await Role.updateRole(req.params.id, req.body);
-    if (!role) return res.status(404).json({ message: 'Role not found' });
-    res.json(role);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+router.put('/:id', authorizeRoles(['admin']), updateRole);
 
 // Delete Role
-router.delete('/:id', authorizeRoles(['admin']), async (req, res) => {
-  try {
-    const wasDeleted = await Role.deleteRole(req.params.id);
-    if (wasDeleted) {
-      res.json({ message: 'Role marked as deleted', success: true });
-    } else {
-      res.status(404).json({ message: 'Role not found', success: false });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.delete('/:id', authorizeRoles(['admin']), deleteRole);
 
 module.exports = router;
