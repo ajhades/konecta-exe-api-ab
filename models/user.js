@@ -1,16 +1,19 @@
 const pool = require('../db/db');
+const bcrypt = require('bcryptjs');
 
 // Create User
 const createUser = async (user) => {
-  const { username, email, password, role } = user;
+  const { username, email, password, role_id } = user;
+  console.log('user', user);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const result = await pool.query(
     `INSERT INTO users (username, email, password, role_id, created_at, updated_at) 
      VALUES ($1, $2, $3, $4, $5, $6)  RETURNING *`,
     [
       username.toLowerCase(),
       email.toLowerCase(),
-      password,
-      role,
+      hashedPassword,
+      role_id,
       new Date(),
       new Date(),
     ]
@@ -66,9 +69,9 @@ const deleteUser = async (id) => {
 const getUsersLogin = async (user) => {
   const { username, password } = user;
   const result = await pool.query(
-    `SELECT username, role_id FROM users 
-     WHERE deleted_at is null AND username = $1 AND password = $2`,
-    [username, password]
+    `SELECT username, password, role_id FROM users 
+     WHERE deleted_at is null AND username = $1`,
+    [username]
   );
   return result.rows[0];
 };
