@@ -1,16 +1,19 @@
 const pool = require('../db/db');
+const bcrypt = require('bcryptjs');
 
 // Create User
 const createUser = async (user) => {
-  const { username, email, password, role } = user;
+  const { username, email, password, role_id } = user;
+  console.log('user', user);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const result = await pool.query(
     `INSERT INTO users (username, email, password, role_id, created_at, updated_at) 
      VALUES ($1, $2, $3, $4, $5, $6)  RETURNING *`,
     [
       username.toLowerCase(),
       email.toLowerCase(),
-      password,
-      role,
+      hashedPassword,
+      role_id,
       new Date(),
       new Date(),
     ]
@@ -37,7 +40,7 @@ const getUserById = async (id) => {
 
 // Update User
 const updateUser = async (id, user) => {
-  const { username, email, password, role } = user;
+  const { username, email, password, role_id } = user;
   const result = await pool.query(
     `UPDATE users SET username = $1, email = $2, password = $3, role_id = $4, updated_at = $5 
      WHERE id = $6 AND deleted_at is null RETURNING *`,
@@ -45,7 +48,7 @@ const updateUser = async (id, user) => {
       username.toLowerCase(),
       email.toLowerCase(),
       password,
-      role,
+      role_id,
       new Date(),
       id,
     ]
@@ -64,11 +67,11 @@ const deleteUser = async (id) => {
 
 // Get User login
 const getUsersLogin = async (user) => {
-  const { username, password } = user;
+  const { username } = user;
   const result = await pool.query(
-    `SELECT username, role_id FROM users 
-     WHERE deleted_at is null AND username = $1 AND password = $2`,
-    [username, password]
+    `SELECT username, password, role_id FROM users 
+     WHERE deleted_at is null AND username = $1`,
+    [username]
   );
   return result.rows[0];
 };

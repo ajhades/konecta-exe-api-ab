@@ -1,15 +1,17 @@
 const { faker } = require('@faker-js/faker');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const pool = require('../db');
 
 const seedUsers = async () => {
   const users = [];
+  const hashedPassword = await bcrypt.hash('password', 10);
 
   for (let i = 0; i < 5; i++) {
     users.push({
       username: faker.internet.userName().toLowerCase(),
       email: faker.internet.email().toLowerCase(),
-      password: faker.internet.password(),
+      password: hashedPassword,
       role_id: i === 0 ? 1 : faker.number.int({ min: 1, max: 3 }),
       created_at: new Date(),
       updated_at: new Date(),
