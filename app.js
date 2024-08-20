@@ -1,4 +1,5 @@
 var express = require('express');
+const cors = require('cors');
 const helmet = require('helmet');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -17,9 +18,19 @@ const authenticateToken = require('./middlewares/authenticateToken');
 var app = express();
 
 const PORT = process.env.SERVER_PORT;
+const FRONT_END_ENDPOINT = process.env.FRONT_END_ENDPOINT;
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+app.use(
+  cors({
+    origin: FRONT_END_ENDPOINT, // Permite solicitudes solo desde esta URL
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+  })
+);
 
 app.use(logger('dev'));
 app.use(helmet());

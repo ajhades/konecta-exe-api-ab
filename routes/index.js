@@ -6,8 +6,8 @@ const { index } = require('../controllers/indexController');
 /* GET home page. */
 router.get('/', index);
 
-router.post('/login', login);
+router.post('/api/v1/login', login);
 
-router.post('/logout', logout);
+router.post('/api/v1/logout', logout);
 
 module.exports = router;

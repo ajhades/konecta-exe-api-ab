@@ -4,13 +4,27 @@ const applicationSchema = require('../validation/applicationSchema');
 const { idSchema } = require('../validation/generalSchema');
 
 /**
- * Controller to list all applications with validation.
+ * Controller to list all applications.
  *
  * @param {object} req - Request object.
  * @param {object} res - Response object.
  */
 
 const indexApplication = async (req, res) => {
+  try {
+    const allApplications = await Application.getApplications();
+    res.json(allApplications);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Controller to list all applications paginated.
+ * @param {*} req
+ * @param {*} res
+ */
+const listPaginationApplication = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 10;
   const filters = req.query.filters ? JSON.parse(req.query.filters) : {};
@@ -111,7 +125,11 @@ const deleteApplication = async (req, res) => {
   try {
     const wasDeleted = await Application.deleteApplication(req.params.id);
     if (wasDeleted) {
-      res.json({ message: 'Application marked as deleted', success: true });
+      res.json({
+        message: 'Application marked as deleted',
+        success: true,
+        id: req.params.id,
+      });
     } else {
       res
         .status(404)
@@ -125,6 +143,7 @@ const deleteApplication = async (req, res) => {
 
 module.exports = {
   indexApplication,
+  listPaginationApplication,
   createApplication,
   findApplication,
   updateApplication,

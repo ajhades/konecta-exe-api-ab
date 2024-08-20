@@ -4,13 +4,27 @@ const employeeSchema = require('../validation/employeeSchema');
 const { idSchema } = require('../validation/generalSchema');
 
 /**
- * Controller to list all employees with validation.
+ * Controller to list all employees.
  *
  * @param {object} req - Request object.
  * @param {object} res - Response object.
  */
 
 const indexEmployee = async (req, res) => {
+  try {
+    const allEmployees = await Employee.getEmployees();
+    res.json(allEmployees);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Controller to list all employee paginated.
+ * @param {*} req
+ * @param {*} res
+ */
+const listPaginationEmployee = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 10;
   const filters = req.query.filters ? JSON.parse(req.query.filters) : {};
@@ -108,7 +122,11 @@ const deleteEmployee = async (req, res) => {
   try {
     const wasDeleted = await Employee.deleteEmployee(req.params.id);
     if (wasDeleted) {
-      res.json({ message: 'Employee marked as deleted', success: true });
+      res.json({
+        message: 'Employee marked as deleted',
+        success: true,
+        id: req.params.id,
+      });
     } else {
       res.status(404).json({ message: 'Employee not found', success: false });
     }
@@ -120,6 +138,7 @@ const deleteEmployee = async (req, res) => {
 
 module.exports = {
   indexEmployee,
+  listPaginationEmployee,
   createEmployee,
   findEmployee,
   updateEmployee,
