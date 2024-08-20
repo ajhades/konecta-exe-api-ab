@@ -40,7 +40,7 @@ const getUserById = async (id) => {
 
 // Update User
 const updateUser = async (id, user) => {
-  const { username, email, password, role } = user;
+  const { username, email, password, role_id } = user;
   const result = await pool.query(
     `UPDATE users SET username = $1, email = $2, password = $3, role_id = $4, updated_at = $5 
      WHERE id = $6 AND deleted_at is null RETURNING *`,
@@ -48,7 +48,7 @@ const updateUser = async (id, user) => {
       username.toLowerCase(),
       email.toLowerCase(),
       password,
-      role,
+      role_id,
       new Date(),
       id,
     ]
@@ -67,7 +67,7 @@ const deleteUser = async (id) => {
 
 // Get User login
 const getUsersLogin = async (user) => {
-  const { username, password } = user;
+  const { username } = user;
   const result = await pool.query(
     `SELECT username, password, role_id FROM users 
      WHERE deleted_at is null AND username = $1`,
